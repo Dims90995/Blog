@@ -2,9 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 
-// rooutes
+// Routes
 router.get('', (req, res) => {
-    res.send('Hello World!');
+    res.render('index', {
+        title: 'Home',
+        layout: './layouts/main',
+    });
   });
 
 
