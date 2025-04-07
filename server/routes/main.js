@@ -8,7 +8,7 @@ router.get('', (req, res) => {
         title: 'Blog',
         description: 'simple Blog',
     }
-    
+
     res.render('index', { locals }); 
     });
         
@@ -18,5 +18,8 @@ router.get('', (req, res) => {
     res.render('about' )
   });
 
+  router.get('/contact', (req, res) => {
+    res.render('contact' )
+  });
 
   module.exports = router;
