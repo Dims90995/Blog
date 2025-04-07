@@ -73,9 +73,10 @@ router.get('/post/:id', async (req, res) => {
  * Post - searchTerm
 */
 router.post('/search', async (req, res) => {
+
   try {
     const locals = {
-      title: "search",
+      title: "seach",
       description: "INT fullstack Blog"
     }
 
