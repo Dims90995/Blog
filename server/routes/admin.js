@@ -199,21 +199,20 @@ router.put('/edit-post/:id', authMiddleware, async (req, res) => {
 
 });
 
-
-// router.post('/admin', async (req, res) => {
-//   try {
-//     const { username, password } = req.body;
+router.post('/admin', async (req, res) => {
+try {
+const { username, password } = req.body;
     
-//     if(req.body.username === 'admin' && req.body.password === 'password') {
-//       res.send('You are logged in.')
-//     } else {
-//       res.send('Wrong username or password');
-//     }
+ if(req.body.username === 'admin' && req.body.password === 'password') {
+   res.send('You are logged in.')
+  } else {
+     res.send('Wrong username or password');
+   }
 
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
+ } catch (error) {
+    console.log(error);
+  }
+});
 
 
 /**
