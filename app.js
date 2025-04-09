@@ -6,6 +6,7 @@ const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const nodemailer = require('nodemailer');
 
 const connectDB = require('./server/config/db');
 const { isActiveRoute } = require('./server/helpers/routeHelpers');
@@ -47,4 +48,71 @@ app.use('/', require('./server/routes/admin'));
 
 app.listen(PORT, ()=> {
   console.log(`App listening on port ${PORT}`);
+});
+
+
+
+// emailsender  conttact page//
+require('dotenv').config();  // Load environment variables at the very top
+
+app.use(express.urlencoded({ extended: false }));
+
+app.set('view engine', 'ejs');
+
+// Middleware to set locals for EJS templates
+app.use((req, res, next) => {
+  res.locals.currentRoute = req.path;
+  res.locals.isActiveRoute = (route, currentRoute) => {
+    return route === currentRoute ? 'active' : '';
+  };
+  next();
+});
+
+app.get('/contact', (req, res) => {
+  res.render('contact');
+});
+
+app.post('/contact', (req, res) => {
+  const sender = req.body.sender;
+  const message = req.body.message;
+
+  // Create a Nodemailer transporter using Gmail
+  let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,      // dims90995@gmail.com from your .env file
+      pass: process.env.EMAIL_PASS       // Your app-specific password from your .env file
+    },
+    debug: true  // Enable debug output (optional)
+  });
+
+  // Verify transporter configuration
+  transporter.verify((error, success) => {
+    if (error) {
+      console.error('Transporter verification failed:', error);
+    } else {
+      console.log('Server is ready to send emails');
+    }
+  });
+
+  let mailOptions = {
+    from: sender,                      // Email input from the form
+    to: 'dims90995@gmail.com',          // The target email address you provided
+    subject: 'New Contact Message',
+    text: message
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending mail:', error);
+      res.render('contact', { message: 'Error sending message. Please try again later.' });
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.render('contact', { message: 'Message sent successfully!' });
+    }
+  });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
 });
