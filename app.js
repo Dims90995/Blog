@@ -146,39 +146,6 @@ app.post('/contact', (req, res) => {
   });
 });
 
-
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
-mongoose.connection.once('open', () => {
-  console.log("Mongoose connected!");
-
-  const session = require('express-session');
-  const MongoStore = require('connect-mongo');
-  const express = require('express');
-  const app = express();
-  
-  app.use(session({
-    secret: process.env.JWT_SECRET || 'defaultSecret',
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URI,
-
-      client: mongoose.connection.getClient(),
-      ttl: 14 * 24 * 60 * 60  // 14 days
-
-    })
-  }));
-  
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
-  });
-});
-
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
