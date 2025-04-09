@@ -53,13 +53,13 @@ app.listen(PORT, ()=> {
 
 
 // emailsender  conttact page//
-require('dotenv').config();  // Load environment variables at the very top
+require('dotenv').config();  
 
 app.use(express.urlencoded({ extended: false }));
 
 app.set('view engine', 'ejs');
 
-// Middleware to set locals for EJS templates
+
 app.use((req, res, next) => {
   res.locals.currentRoute = req.path;
   res.locals.isActiveRoute = (route, currentRoute) => {
@@ -76,17 +76,16 @@ app.post('/contact', (req, res) => {
   const sender = req.body.sender;
   const message = req.body.message;
 
-  // Create a Nodemailer transporter using Gmail
+ 
   let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.EMAIL_USER,      // dims90995@gmail.com from your .env file
-      pass: process.env.EMAIL_PASS       // Your app-specific password from your .env file
+      user: process.env.EMAIL_USER,      
+      pass: process.env.EMAIL_PASS       
     },
-    debug: true  // Enable debug output (optional)
+    debug: true  
   });
 
-  // Verify transporter configuration
   transporter.verify((error, success) => {
     if (error) {
       console.error('Transporter verification failed:', error);
@@ -96,8 +95,8 @@ app.post('/contact', (req, res) => {
   });
 
   let mailOptions = {
-    from: sender,                      // Email input from the form
-    to: 'dims90995@gmail.com',          // The target email address you provided
+    from: sender,                   
+    to: 'dims90995@gmail.com',         
     subject: 'New Contact Message',
     text: message
   };
