@@ -146,9 +146,6 @@ app.post('/contact', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
-});
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
