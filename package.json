@@ -2,7 +2,7 @@
   "name": "blog",
   "version": "1.0.0",
   "description": "finale",
-  "main": "./views/index.ejs",
+  "main": "/server/models/User.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "app.js",
