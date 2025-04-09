@@ -146,9 +146,6 @@ app.post('/contact', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
-});
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -181,4 +178,9 @@ mongoose.connection.once('open', () => {
     console.log(`Server started on port ${PORT}`);
   });
 });
+
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
+});
+
 
