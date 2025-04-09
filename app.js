@@ -149,3 +149,14 @@ app.post('/contact', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'yourSecret',
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI || 'mongodb://localhost:27017/myDatabase',
+    // Optional: set TTL (time-to-live) for sessions in seconds
+    ttl: 14 * 24 * 60 * 60
+  })
+}));
