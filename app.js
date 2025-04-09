@@ -151,13 +151,12 @@ app.listen(PORT, () => {
 });
 
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'yourSecret',
+  secret: process.env.SESSION_SECRET || 'defaultSecret',
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
-    mongoUrl: process.env.MONGO_URI || 'mongodb://localhost:27017/myDatabase',
-    // Optional: set TTL (time-to-live) for sessions in seconds
-    ttl: 14 * 24 * 60 * 60
+    mongoUrl: process.env.MONGO_URI, 
+    ttl: 14 * 24 * 60 * 60  
   })
 }));
 
