@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const nodemailer = require('nodemailer');
+const mongoose = require('mongoose');
 
 const connectDB = require('./server/config/db');
 const { isActiveRoute } = require('./server/helpers/routeHelpers');
@@ -53,10 +54,19 @@ app.listen(PORT, ()=> {
 
 
 // emailsender  conttact page//
-require('dotenv').config();  
+
+const MailLogSchema = new mongoose.Schema({
+  sender: String,
+  subject: String,
+  message: String,
+  dateSent: { type: Date, default: Date.now },
+  infoResponse: String,  
+  error: String,         
+});
+
+const MailLog = mongoose.model('MailLog', MailLogSchema);
 
 app.use(express.urlencoded({ extended: false }));
-
 app.set('view engine', 'ejs');
 
 
@@ -102,6 +112,30 @@ app.post('/contact', (req, res) => {
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending mail:', error);
+      res.render('contact', { message: 'Error sending message. Please try again later.' });
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.render('contact', { message: 'Message sent successfully!' });
+    }
+        log.save((err) => {
+      if (err) {
+        console.error('Error saving mail log:', err);
+      } else {
+        console.log('Mail log saved successfully.');
+      }
+    });
+
+    new MailLog(logData)
+      .save()
+      .then(savedLog => {
+        console.log('Mail log saved successfully:', savedLog);
+      })
+      .catch(err => {
+        console.error('Error saving mail log:', err);
+      });
+
     if (error) {
       console.error('Error sending mail:', error);
       res.render('contact', { message: 'Error sending message. Please try again later.' });
